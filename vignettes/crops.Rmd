@@ -1,0 +1,51 @@
+---
+title: "Our World in Data: Key Crop Yields"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Our World in Data: Key Crop Yields}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6.5,
+  fig.height = 5
+)
+```
+
+```{r setup}
+library(cwdata)
+```
+
+This package provides the `key_crop_yields` dataset, which contains crop yields for countries over time. The yields are measured in tonnes per hectare for `r length(unique(key_crop_yields$crop))` crops (`r glue::glue_collapse(unique(key_crop_yields$crop),sep = ", ", last = " and ")`). This data is sourced from [Our World in Data](https://ourworldindata.org/crop-yields)  and [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-09-01/readme.md).
+
+It can be accessed via:
+```{r}
+library(cwdata)
+library(tibble)
+key_crop_yields
+```
+
+# Exploration of the data
+
+Crop production in Australia:
+
+```{r plot}
+library(ggplot2)
+library(dplyr)
+key_crop_yields %>% 
+  filter(entity == "Australia") %>% 
+  ggplot(aes(x = year, y = tonnes_per_hectare)) + 
+  geom_line() + 
+  facet_wrap(vars(crop), scales = "free_y") + 
+  labs(
+    title = "Australian crop production over time",
+    y = "Tonnes per hectare",
+    x = "Time in years"
+  ) + 
+  theme_bw()
+```
+
